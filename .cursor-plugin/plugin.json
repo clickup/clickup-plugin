@@ -1,0 +1,21 @@
+{
+  "name": "clickup",
+  "description": "Connect Cursor to your ClickUp workspace — manage tasks, track time, and collaborate without switching context.",
+  "version": "1.0.0",
+  "author": {
+    "name": "ClickUp",
+    "email": "support@clickup.com"
+  },
+  "homepage": "https://clickup.com",
+  "repository": "https://github.com/clickup/clickup-plugin",
+  "keywords": [
+    "clickup",
+    "tasks",
+    "project-management",
+    "productivity",
+    "time-tracking",
+    "workspace",
+    "mcp"
+  ],
+  "logo": "assets/logo.svg"
+}
