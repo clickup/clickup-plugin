@@ -4,6 +4,10 @@ Connect your ClickUp workspace to your favorite AI coding tools. Manage tasks, t
 
 ## Install
 
+### Claude Code
+
+In Claude Code, open the plugin manager with `/plugin` and search for **ClickUp**.
+
 ### Cursor
 
 Install from the [Cursor Marketplace](https://cursor.com/marketplace) — search for **ClickUp**.
