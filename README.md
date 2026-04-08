@@ -6,7 +6,17 @@ Connect your ClickUp workspace to your favorite AI coding tools. Manage tasks, t
 
 ### Claude Code
 
-In Claude Code, open the plugin manager with `/plugin` and search for **ClickUp**.
+From the terminal:
+```bash
+claude plugin marketplace add clickup/clickup-plugin
+claude plugin install clickup@clickup-plugin-marketplace
+```
+
+Or from inside Claude Code:
+```
+/plugin marketplace add clickup/clickup-plugin
+/plugin install clickup@clickup-plugin-marketplace
+```
 
 ### Cursor
 
@@ -33,6 +43,7 @@ On first use, you'll be prompted to authorize with your ClickUp account via OAut
 {
   "mcpServers": {
     "clickup": {
+      "type": "http",
       "url": "https://mcp.clickup.com/mcp"
     }
   }

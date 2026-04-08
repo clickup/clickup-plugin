@@ -1,0 +1,22 @@
+{
+  "name": "clickup-plugin-marketplace",
+  "metadata": {
+    "description": "Official ClickUp plugins for Claude Code"
+  },
+  "owner": {
+    "name": "ClickUp",
+    "email": "support@clickup.com"
+  },
+  "plugins": [
+    {
+      "name": "clickup",
+      "description": "Connect Claude Code to your ClickUp workspace — manage tasks, track time, and collaborate without switching context.",
+      "version": "1.0.0",
+      "source": {
+        "source": "github",
+        "repo": "clickup/clickup-plugin"
+      },
+      "homepage": "https://clickup.com"
+    }
+  ]
+}
