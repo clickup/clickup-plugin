@@ -22,6 +22,10 @@ Or from inside Claude Code:
 
 Install from the [Cursor Marketplace](https://cursor.com/marketplace) — search for **ClickUp**.
 
+### Other clients (Agent Plugins standard)
+
+This repo also ships a portable [Agent Plugins](https://agent-plugins.org/) package (root `plugin.json` + `mcp.json`), so it works in any client that supports the open standard — including OpenAI Codex, GitHub Copilot / VS Code, Kiro, and Cursor. Follow your client's plugin install flow and point it at this repository.
+
 ## What's Included
 
 ### MCP Server
