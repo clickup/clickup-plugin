@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "clickup",
+  "version": "1.0.0",
+  "description": "Connect your AI coding agent to your ClickUp workspace — manage tasks, track time, and collaborate without switching context.",
+  "author": {
+    "name": "ClickUp",
+    "email": "support@clickup.com"
+  },
+  "homepage": "https://clickup.com",
+  "repository": "https://github.com/clickup/clickup-plugin",
+  "license": "MIT",
+  "keywords": [
+    "clickup",
+    "tasks",
+    "project-management",
+    "productivity",
+    "time-tracking",
+    "workspace",
+    "mcp"
+  ]
+}
