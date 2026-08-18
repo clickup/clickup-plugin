@@ -22,9 +22,9 @@ Or from inside Claude Code:
 
 Install from the [Cursor Marketplace](https://cursor.com/marketplace) — search for **ClickUp**.
 
-### Microsoft 365 Copilot (Cowork)
+### Microsoft 365 Copilot ([Cowork](https://learn.microsoft.com/en-us/microsoft-365/copilot/cowork/cowork-manage-plugins))
 
-Install from the Microsoft 365 App Store — search for **ClickUp** — or ask your admin to add it via the Microsoft 365 admin center. The app package source lives in [`m365/`](./m365/).
+In Cowork, open **Sources & Skills** → **Plugins** and find **ClickUp** under Discover, or ask your admin to deploy it from the Microsoft 365 admin center. The app package source lives in [`m365/`](./m365/).
 
 ### Other clients (Agent Plugins standard)
 
