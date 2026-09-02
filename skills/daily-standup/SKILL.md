@@ -55,7 +55,8 @@ it returns.
 
 ## Check the commits, if there are any
 
-If a repository is open, read the last day of commit history. This is the part the
+If a repository is open, read the commit history over the same window as the task
+pull — back to the last working day, so a Monday covers Friday. This is the part the
 ClickUp data can't give you: task statuses lag reality because people forget to move
 tickets, but commits don't lie.
 
