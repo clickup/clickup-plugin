@@ -24,8 +24,18 @@ doing so cheap.
 ## Pull the slate
 
 `clickup_filter_tasks` with the user's assignee and `include_closed: false` for what's
-open. Then a second call with `date_closed_from` set to yesterday for what they
-finished.
+open. Then a second call with `date_closed_from` for what they finished. Set it to the
+last working day, not literally yesterday — a Monday standup that looks back to Sunday
+misses everything closed on Friday. Start the window one day earlier than that, too:
+the date filters are evaluated in UTC, so an end-of-day close west of UTC lands on the
+next calendar date and a tight window silently returns nothing. Trim the overshoot when
+you read the results.
+
+Watch the open results for tasks whose status reads as finished — "complete", "shipped".
+A status of type `done` never sets a close date, so those tasks pass an
+`include_closed: false` filter and land with the open work. Treat them as finished work
+to confirm, not as something in flight, and verify the type with `expand_statuses: true`
+before moving anything.
 
 There is no "active" or "in progress" status value — that parameter takes literal
 status names, which differ per workspace. `include_closed: false` is how you get open
@@ -158,7 +168,12 @@ ending.
 ## Gotchas
 
 - **`date_closed_from`**, not `date_done_gt`. The underlying API uses the latter; this
-  tool does not.
+  tool does not. And it is evaluated in UTC: a Friday-evening close in a western
+  timezone lands on Saturday's date, so a same-day window returns nothing, with no
+  error. Start the window a day early and trim by hand.
+- **"Yesterday" means the last working day.** On a Monday, look back to Friday. A
+  literal yesterday produces an empty slate and an interrogation the tracker could have
+  answered.
 - **`statuses` takes literal status names**, not categories. There is no "active".
 - **`filter_tasks` will not resolve assignees for you.** It takes numeric IDs only, so
   "me" must go through `clickup_resolve_assignees` first. `clickup_create_task` accepts
