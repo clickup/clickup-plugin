@@ -40,8 +40,8 @@ The user will name it: "the Henderson onboarding", "last month's audit", "Projec
 Zord". Resolve with `clickup_get_list`, which accepts `list_name` directly and returns
 the ID, the space, and the list's configured statuses.
 
-Only reach for `clickup_get_workspace_hierarchy` if they don't know what exists. Note
-that it returns spaces without their lists, so it tells you less than the name suggests.
+Only reach for `clickup_get_workspace_hierarchy` if they don't know what exists, and
+pass `depth: 2` — shallower calls return spaces without their lists.
 
 If the source is a single task with subtasks rather than a whole list, read it with
 `clickup_get_task` and `include: ["subtasks"]`, and rebuild it the same way — one new

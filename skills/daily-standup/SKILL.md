@@ -27,9 +27,10 @@ doing so cheap.
 open. Then a second call with `date_closed_from` for what they finished. Set it to the
 last working day, not literally yesterday — a Monday standup that looks back to Sunday
 misses everything closed on Friday. Start the window one day earlier than that, too:
-the date filters are evaluated in UTC, so an end-of-day close west of UTC lands on the
-next calendar date and a tight window silently returns nothing. Trim the overshoot when
-you read the results.
+date filters are evaluated in the user's profile timezone, falling back to UTC when the
+profile has none — and under that fallback an end-of-day close lands on the next
+calendar date, so a tight window silently returns nothing. The extra day is cheap
+insurance either way; trim the overshoot when you read the results.
 
 Watch the open results for tasks whose status reads as finished — "complete", "shipped".
 A status of type `done` never sets a close date, so those tasks pass an
@@ -49,9 +50,10 @@ an error without it — on the reads, on the writes, and on tools which otherwis
 parameters at all. Establish it once at the start and thread it through everything,
 `update_task` and `create_comment` included.
 
-`clickup_filter_tasks` needs numeric user IDs in `assignees` — it will not accept "me",
-an email or a username. Call `clickup_resolve_assignees` with "me" first and pass the ID
-it returns.
+For `assignees` on `clickup_filter_tasks`, resolve "me" to a numeric user ID with
+`clickup_resolve_assignees` first. The server can resolve names and emails in many
+tools, but a numeric ID is the one form accepted everywhere — resolve once at the start
+and reuse it in every call.
 
 ## Check the commits, if there are any
 
@@ -169,17 +171,19 @@ ending.
 ## Gotchas
 
 - **`date_closed_from`**, not `date_done_gt`. The underlying API uses the latter; this
-  tool does not. And it is evaluated in UTC: a Friday-evening close in a western
-  timezone lands on Saturday's date, so a same-day window returns nothing, with no
-  error. Start the window a day early and trim by hand.
+  tool does not. Dates resolve in the user's profile timezone, or UTC when the profile
+  has none — under that fallback a Friday-evening close in a western timezone lands on
+  Saturday's date and a same-day window returns nothing, with no error. Start the
+  window a day early and trim by hand.
 - **"Yesterday" means the last working day.** On a Monday, look back to Friday. A
   literal yesterday produces an empty slate and an interrogation the tracker could have
   answered.
 - **`statuses` takes literal status names**, not categories. There is no "active".
-- **`filter_tasks` will not resolve assignees for you.** It takes numeric IDs only, so
-  "me" must go through `clickup_resolve_assignees` first. `clickup_create_task` accepts
-  emails and usernames, but `"me"` is silently ignored there — the task lands with no
-  assignee and no error. Resolve "me" to a numeric ID everywhere.
+- **Resolve "me" to a numeric ID once, and reuse it.** The server resolves names and
+  emails in many tools, but numeric IDs are the one form accepted everywhere — and in
+  testing, `"me"` passed to `clickup_create_task` was silently ignored, leaving the
+  task unassigned with no error. One `clickup_resolve_assignees` call up front removes
+  the whole class of problem.
 - **`filter_tasks` returns 100 per page** with `has_more` and `next_page`. One person's
   open work rarely exceeds that, but check rather than assume.
 - **`workspace_id` is required whenever the user has more than one workspace**, which is
