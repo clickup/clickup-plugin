@@ -66,6 +66,16 @@ Or the stdio fallback:
 }
 ```
 
+### Skills
+
+The plugin includes three skills — workflow playbooks the assistant follows for jobs that take more than one tool call. Each activates on a plain-language request, previews anything it plans to create, and waits for your approval before writing to your workspace.
+
+- **task-decomposition** — "break this down": turns a goal or oversized task into a small set of ordered subtasks with dependencies.
+- **daily-standup** — "run my standup": drafts a standup from your open work, asks what changed, writes your answers back to the tasks, and gives you the summary to share.
+- **repeat-project** — "set this up for the new client": rebuilds a finished project for the next run, swapping in the new details and shifting every date onto the new schedule.
+
+Skills live in `skills/<name>/SKILL.md` and are discovered automatically — no configuration needed.
+
 ## Links
 
 - [ClickUp MCP Docs](https://developer.clickup.com/docs/connect-an-ai-assistant-to-clickups-mcp-server)
