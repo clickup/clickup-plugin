@@ -22,6 +22,10 @@ Or from inside Claude Code:
 
 Install from the [Cursor Marketplace](https://cursor.com/marketplace) — search for **ClickUp**.
 
+### Microsoft 365 Copilot ([Cowork](https://learn.microsoft.com/en-us/microsoft-365/copilot/cowork/cowork-manage-plugins))
+
+In Cowork, open **Sources & Skills** → **Plugins** and find **ClickUp** under Discover, or ask your admin to deploy it from the Microsoft 365 admin center. The app package source lives in [`m365/`](./m365/).
+
 ### Other clients (Agent Plugins standard)
 
 This repo also ships a portable [Agent Plugins](https://agent-plugins.org/) package (root `plugin.json` + `mcp.json`), so it works in any client that supports the open standard — including OpenAI Codex, GitHub Copilot / VS Code, Kiro, and Cursor. Follow your client's plugin install flow and point it at this repository.
