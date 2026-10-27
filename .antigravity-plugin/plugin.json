@@ -2,7 +2,7 @@
   "name": "clickup",
   "displayName": "ClickUp",
   "version": "1.1.0",
-  "description": "Connect Antigravity to your ClickUp workspace — manage tasks, track time, and collaborate without switching context.",
+  "description": "Connect Antigravity to your ClickUp workspace — manage tasks, track time, and collaborate with your team without switching context.",
   "logo": "assets/logo.svg",
   "suggestedPrompts": [
     "Run my daily standup from my open ClickUp tasks",
