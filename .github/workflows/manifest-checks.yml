@@ -1,0 +1,35 @@
+name: Manifest checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  manifest-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install validators
+        run: |
+          npm install --no-save --no-package-lock --prefix ci ajv@8.17.1 ajv-formats@3.0.1
+          npm install --global @anthropic-ai/claude-code
+
+      - name: Schema check (Agent Plugins and Cursor)
+        run: node ci/validate-schemas.mjs
+
+      - name: claude plugin validate
+        run: claude plugin validate . --strict
+
+      - name: Cursor resolves the plugin
+        run: node ci/cursor-resolve.mjs .
+
+      - name: Fixture tests (bad must fail, good must pass)
+        run: node ci/test-fixtures.mjs

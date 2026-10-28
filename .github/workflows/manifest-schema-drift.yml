@@ -1,0 +1,26 @@
+name: Cursor schema drift
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Diff vendored schemas against cursor/plugins main
+        run: |
+          status=0
+          for name in plugin marketplace; do
+            curl -fsSL "https://raw.githubusercontent.com/cursor/plugins/main/schemas/${name}.schema.json" -o "upstream-${name}.schema.json"
+            diff -u "ci/schemas/cursor/${name}.schema.json" "upstream-${name}.schema.json" || status=1
+          done
+          if [ "$status" -ne 0 ]; then
+            echo "::error::Vendored Cursor schemas differ from cursor/plugins main. See ci/schemas/cursor/README.md to update."
+          fi
+          exit "$status"

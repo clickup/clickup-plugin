@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "clickup": {
+      "command": "${PLUGIN_ROOT}/bin/clickup-mcp"
+    }
+  }
+}
