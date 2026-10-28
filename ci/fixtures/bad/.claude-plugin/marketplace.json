@@ -1,0 +1,12 @@
+{
+  "name": "clickup-plugin-marketplace",
+  "plugins": [
+    {
+      "name": "clickup",
+      "source": {
+        "source": "github",
+        "repo": "clickup/clickup-plugin"
+      }
+    }
+  ]
+}

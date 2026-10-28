@@ -1,0 +1,19 @@
+{
+  "name": "clickup-plugin-marketplace",
+  "metadata": {
+    "description": "Official ClickUp plugins for Cursor"
+  },
+  "owner": {
+    "name": "ClickUp",
+    "email": "support@clickup.com"
+  },
+  "plugins": [
+    {
+      "name": "clickup",
+      "description": "Connect Cursor to your ClickUp workspace — manage tasks, track time, and collaborate without switching context.",
+      "version": "1.1.0",
+      "source": ".",
+      "homepage": "https://clickup.com"
+    }
+  ]
+}
