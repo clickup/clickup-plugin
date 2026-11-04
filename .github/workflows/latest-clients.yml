@@ -1,19 +1,19 @@
 name: Latest client check
 
 # Re-runs the client checks against the newest Claude Code, Codex and Cursor agent.
-# Also runs on a PR that edits this file, because GitHub cannot dispatch a workflow that is not on the default branch yet.
 # A failure means a client changed a lookup rule that the pinned checks in manifest-checks.yml assume.
 on:
-  pull_request:
-    paths:
-      - .github/workflows/latest-clients.yml
-      - ci/cursor-markers.sh
   schedule:
     - cron: "0 7 * * 1"
   workflow_dispatch:
 
 permissions:
   contents: read
+
+# shell: bash runs with -eo pipefail, so a failure inside a pipe fails the step.
+defaults:
+  run:
+    shell: bash
 
 jobs:
   latest-clients:
@@ -28,12 +28,11 @@ jobs:
         run: |
           npm install --global @anthropic-ai/claude-code@latest @openai/codex@latest
           curl -fsSL https://cursor.com/install | bash
-          {
-            echo "### Client versions"
-            echo "- claude: $(claude --version)"
-            echo "- codex: $(codex --version)"
-            echo "- cursor-agent: $(ls "$HOME/.local/share/cursor-agent/versions" | grep -v '^\.' | tr '\n' ' ')"
-          } | tee -a "$GITHUB_STEP_SUMMARY"
+          claude_version="$(claude --version)"
+          codex_version="$(codex --version)"
+          cursor_versions="$(ls "$HOME/.local/share/cursor-agent/versions" | grep -v '^\.' | tr '\n' ' ')"
+          test -n "$cursor_versions"
+          printf '### Client versions\n- claude: %s\n- codex: %s\n- cursor-agent: %s\n' "$claude_version" "$codex_version" "$cursor_versions" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Claude Code validate (latest)
         run: claude plugin validate . --strict

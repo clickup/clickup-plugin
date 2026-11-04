@@ -8,6 +8,11 @@ on:
 permissions:
   contents: read
 
+# shell: bash runs with -eo pipefail, so a failure inside a pipe fails the step.
+defaults:
+  run:
+    shell: bash
+
 env:
   CLAUDE_CODE_VERSION: 2.1.318
   CODEX_VERSION: 0.152.0

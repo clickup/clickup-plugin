@@ -25,6 +25,7 @@ const COMPONENT_OR_METADATA_FIELDS = [
   "displayName", "description", "author", "logo", "variables", "capabilities",
 ];
 const NOT_A_SERVER_KEYS = new Set(["author", "owner", "source", "metadata", "$schema"]);
+const OTHER_CLIENT_NAMES = ["Claude Code", "Codex", "Antigravity"];
 const UNEXPANDED_VARIABLES = ["${PLUGIN_ROOT}", "${PLUGIN_DATA}"];
 
 const readText = async (path) => {
@@ -140,15 +141,21 @@ export async function check(dir) {
   if (!loaded) {
     failures.push(`${result.file} source "${result.gitPath}": no valid manifest in ${MANIFEST_LOOKUP_ORDER.join(", ")}`);
   }
+  for (const name of OTHER_CLIENT_NAMES) {
+    if (loaded && String(loaded.manifest.description ?? "").includes(name)) {
+      failures.push(`${loaded.file} description names another client ("${name}"); Cursor shows this manifest: ${JSON.stringify(loaded.manifest.description)}`);
+    }
+  }
   const servers = await loadMcpServers(pluginDir, loaded?.manifest);
   const server = servers[PLUGIN_NAME];
   if (!server || (!server.url && !server.command)) {
     failures.push(`no MCP server "${PLUGIN_NAME}" with a url or command in ${MCP_FILES.join(", ")} or the manifest`);
   }
   failures.push(...(await checkMcpVariables(pluginDir)));
+  if (loaded && failures.length > 0) console.error(`  manifest that won: ${loaded.file}`);
   if (failures.length === 0) {
     console.log(`  marketplace: ${result.file} -> gitPath "${result.gitPath}"`);
-    console.log(`  manifest:    ${loaded.file}`);
+    console.log(`  manifest:    ${loaded.file} (name ${loaded.manifest.name}, description ${JSON.stringify(loaded.manifest.description)})`);
     console.log(`  mcp server:  ${PLUGIN_NAME} -> ${server.url ?? server.command}`);
   }
   return failures;
