@@ -1,0 +1,39 @@
+name: Cursor listing
+
+# parser-test: runs on every PR that touches the probe. listing: daily and on demand, reads the live page.
+on:
+  pull_request:
+    paths:
+      - ci/cursor-listing/**
+      - .github/workflows/cursor-listing.yml
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  parser-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Parser fixtures and positive controls
+        run: node --test ci/cursor-listing/probe.test.mjs
+
+  listing:
+    if: github.event_name != 'pull_request'
+    needs: parser-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Cursor marketplace listing is live
+        run: node ci/cursor-listing/probe.mjs --main-ref origin/main | tee -a "$GITHUB_STEP_SUMMARY"
