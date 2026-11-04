@@ -1,8 +1,13 @@
 name: Latest client check
 
 # Re-runs the client checks against the newest Claude Code, Codex and Cursor agent.
+# Also runs on a PR that edits this file, because GitHub cannot dispatch a workflow that is not on the default branch yet.
 # A failure means a client changed a lookup rule that the pinned checks in manifest-checks.yml assume.
 on:
+  pull_request:
+    paths:
+      - .github/workflows/latest-clients.yml
+      - ci/cursor-markers.sh
   schedule:
     - cron: "0 7 * * 1"
   workflow_dispatch:
