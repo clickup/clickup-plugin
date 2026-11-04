@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "clickup": {
+      "serverUrl": "https://mcp.clickup.com/mcp"
+    }
+  }
+}
