@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+env:
+  CLAUDE_CODE_VERSION: 2.1.318
+  CODEX_VERSION: 0.152.0
+
 jobs:
   manifest-checks:
     runs-on: ubuntu-latest
@@ -17,19 +21,22 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install validators
+      - name: Install validators and clients
         run: |
           npm install --no-save --no-package-lock --prefix ci ajv@8.17.1 ajv-formats@3.0.1
-          npm install --global @anthropic-ai/claude-code
+          npm install --global "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}" "@openai/codex@${CODEX_VERSION}"
 
-      - name: Schema check (Agent Plugins and Cursor)
+      - name: Schema check (Agent Plugins 1.0.0, plugin.json and mcp.json)
         run: node ci/validate-schemas.mjs
 
-      - name: claude plugin validate
+      - name: Claude Code validate
         run: claude plugin validate . --strict
 
-      - name: Cursor resolves the plugin
+      - name: Cursor resolves the plugin (manifest and marketplace lookup order)
         run: node ci/cursor-resolve.mjs .
 
-      - name: Fixture tests (bad must fail, good must pass)
+      - name: Codex installs the plugin and lists the MCP server
+        run: ci/codex-check.sh .
+
+      - name: Fixtures (INC-3645 tree and Codex-broken tree must fail, repo tree must pass)
         run: node ci/test-fixtures.mjs

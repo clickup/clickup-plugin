@@ -1,0 +1,43 @@
+name: Latest client check
+
+# Re-runs the client checks against the newest Claude Code, Codex and Cursor agent.
+# A failure means a client changed a lookup rule that the pinned checks in manifest-checks.yml assume.
+on:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  latest-clients:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install latest clients
+        run: |
+          npm install --global @anthropic-ai/claude-code@latest @openai/codex@latest
+          curl -fsSL https://cursor.com/install | bash
+          {
+            echo "### Client versions"
+            echo "- claude: $(claude --version)"
+            echo "- codex: $(codex --version)"
+            echo "- cursor-agent: $(ls "$HOME/.local/share/cursor-agent/versions" | grep -v '^\.' | tr '\n' ' ')"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Claude Code validate (latest)
+        run: claude plugin validate . --strict
+
+      - name: Codex installs the plugin (latest)
+        run: ci/codex-check.sh .
+
+      - name: Fixtures still fail and pass as expected (latest Codex)
+        run: node ci/test-fixtures.mjs
+
+      - name: Cursor lookup-order markers still exist (latest)
+        run: ci/cursor-markers.sh
