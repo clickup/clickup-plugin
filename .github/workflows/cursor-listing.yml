@@ -13,6 +13,11 @@ on:
 permissions:
   contents: read
 
+# bash (no -e flag form) runs with -eo pipefail, so a failing probe in a pipe to tee fails the step.
+defaults:
+  run:
+    shell: bash
+
 jobs:
   parser-test:
     runs-on: ubuntu-latest

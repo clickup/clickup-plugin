@@ -62,3 +62,18 @@ test("CLI exit codes: ok fixture exits 0, mutated payload exits 1", async () => 
   assert.equal(fail.status, 1);
   assert.match(fail.stderr, /FAIL isPublished is false, want true/);
 });
+
+test("the workflow sets shell: bash, so a pipe to tee keeps the probe exit code", async () => {
+  const { writeFile, mkdtemp, readFile: read } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const workflow = await read(join(here, "..", "..", ".github", "workflows", "cursor-listing.yml"), "utf-8");
+  assert.match(workflow, /defaults:\s*\n\s+run:\s*\n\s+shell: bash\b/);
+  // GitHub runs `shell: bash` as `bash --noprofile --norc -eo pipefail {0}`. Same pipe as the listing step.
+  const dir = await mkdtemp(join(tmpdir(), "listing-"));
+  const bad = join(dir, "bad.html");
+  await writeFile(bad, mutate('\\"isPublished\\":true', '\\"isPublished\\":false'));
+  const probe = join(here, "probe.mjs");
+  const run = (flags) => spawnSync("bash", ["--noprofile", "--norc", ...flags, "-c", `node "${probe}" --file "${bad}" | tee /dev/null`], { encoding: "utf-8" });
+  assert.equal(run(["-eo", "pipefail"]).status, 1, "with pipefail the step must fail");
+  assert.equal(run(["-e"]).status, 0, "control: bash -e alone hides the failure, which is why pipefail is needed");
+});
