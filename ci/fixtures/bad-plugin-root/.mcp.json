@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "clickup": {
+      "type": "http",
+      "url": "${PLUGIN_ROOT}/mcp"
+    }
+  }
+}
