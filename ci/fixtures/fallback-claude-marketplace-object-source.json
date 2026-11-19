@@ -1,0 +1,9 @@
+{
+  "description": "Without .cursor-plugin, Cursor reads the Claude marketplace, so its object source breaks Cursor",
+  "expect": "fail",
+  "error": "must be string",
+  "patch": {
+    ".cursor-plugin/marketplace.json": null,
+    ".cursor-plugin/plugin.json": null
+  }
+}

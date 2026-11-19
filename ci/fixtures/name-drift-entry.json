@@ -1,0 +1,18 @@
+{
+  "description": "A marketplace entry names another plugin",
+  "expect": "fail",
+  "error": "name differs",
+  "patch": {
+    ".claude-plugin/marketplace.json": {
+      "plugins": [
+        {
+          "name": "clickup-renamed",
+          "source": {
+            "source": "github",
+            "repo": "clickup/clickup-plugin"
+          }
+        }
+      ]
+    }
+  }
+}

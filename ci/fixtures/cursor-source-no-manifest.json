@@ -1,0 +1,15 @@
+{
+  "description": "Cursor source directory has no plugin manifest",
+  "expect": "fail",
+  "error": "has no plugin manifest",
+  "patch": {
+    ".cursor-plugin/marketplace.json": {
+      "plugins": [
+        {
+          "name": "clickup",
+          "source": "./nowhere"
+        }
+      ]
+    }
+  }
+}

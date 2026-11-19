@@ -1,0 +1,10 @@
+{
+  "description": "Agent Plugins MCP config has an unknown key",
+  "expect": "fail",
+  "error": "additional properties: unknownKey",
+  "patch": {
+    "mcp.json": {
+      "unknownKey": true
+    }
+  }
+}

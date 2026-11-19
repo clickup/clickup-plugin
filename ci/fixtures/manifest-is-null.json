@@ -1,0 +1,8 @@
+{
+  "description": "A manifest is JSON null",
+  "expect": "fail",
+  "error": "must be object",
+  "patch": {
+    ".cursor-plugin/plugin.json": "null"
+  }
+}

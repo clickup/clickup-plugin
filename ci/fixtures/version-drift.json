@@ -1,0 +1,10 @@
+{
+  "description": "Antigravity manifest has another version",
+  "expect": "fail",
+  "error": "version differs",
+  "patch": {
+    ".antigravity-plugin/plugin.json": {
+      "version": "9.9.9"
+    }
+  }
+}

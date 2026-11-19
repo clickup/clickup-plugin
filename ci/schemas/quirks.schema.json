@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Runtime rules that no published schema states",
+  "description": "Applied to every marketplace file that Cursor reads, on top of cursor-marketplace.schema.json. Each entry in allOf is one quirk: its title is its id, its description says what the runtime does. Every quirk needs a failing fixture in ci/fixtures with \"quirk\": \"<id>\". The fixture must pass without the quirk and fail with it.",
+  "allOf": [
+    {
+      "title": "cursor-source-relative",
+      "description": "Cursor installs a plugin from a path inside the marketplace repository. The published schema also allows a remote URL in source, but a URL, an absolute path or a path with .. breaks the install. Use a relative path such as \".\" or \"./plugins/name\".",
+      "type": "object",
+      "properties": {
+        "plugins": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "pattern": "^(?![a-zA-Z][a-zA-Z0-9+.-]*:)(?![/\\\\])(?!(?:.*[/\\\\])?\\.\\.(?:[/\\\\]|$)).+$"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

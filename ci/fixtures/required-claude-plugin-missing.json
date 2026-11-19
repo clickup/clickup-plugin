@@ -1,0 +1,8 @@
+{
+  "description": "Claude plugin manifest is missing",
+  "expect": "fail",
+  "error": ".claude-plugin/plugin.json: missing",
+  "patch": {
+    ".claude-plugin/plugin.json": null
+  }
+}

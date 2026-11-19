@@ -1,0 +1,5 @@
+{
+  "description": "Claude marketplace keeps its object source while a Cursor marketplace exists",
+  "expect": "pass",
+  "patch": {}
+}

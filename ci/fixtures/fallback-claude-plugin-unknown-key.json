@@ -1,0 +1,21 @@
+{
+  "description": "Without .cursor-plugin, Cursor reads the Claude plugin manifest, which has a key Cursor rejects",
+  "expect": "fail",
+  "error": "additional properties: lspServers",
+  "patch": {
+    ".cursor-plugin/plugin.json": null,
+    ".cursor-plugin/marketplace.json": null,
+    ".claude-plugin/marketplace.json": {
+      "plugins": [
+        {
+          "name": "clickup",
+          "source": ".",
+          "version": "1.1.0"
+        }
+      ]
+    },
+    ".claude-plugin/plugin.json": {
+      "lspServers": "lsp.json"
+    }
+  }
+}

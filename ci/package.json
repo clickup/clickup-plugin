@@ -1,0 +1,14 @@
+{
+  "name": "manifest-checks",
+  "private": true,
+  "description": "Validates the plugin manifests against pinned JSON Schemas.",
+  "type": "module",
+  "scripts": {
+    "validate": "node validate.mjs ..",
+    "test": "node --test validate.test.mjs"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  }
+}

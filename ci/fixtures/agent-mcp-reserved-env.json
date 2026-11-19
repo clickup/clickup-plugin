@@ -1,0 +1,18 @@
+{
+  "description": "MCP server sets a reserved env name (propertyNames)",
+  "expect": "fail",
+  "error": "property name must be valid: PLUGIN_ROOT",
+  "patch": {
+    "mcp.json": {
+      "mcpServers": {
+        "local": {
+          "type": "stdio",
+          "command": "run",
+          "env": {
+            "PLUGIN_ROOT": "x"
+          }
+        }
+      }
+    }
+  }
+}

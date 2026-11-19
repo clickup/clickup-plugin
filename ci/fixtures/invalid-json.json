@@ -1,0 +1,8 @@
+{
+  "description": "A manifest does not parse",
+  "expect": "fail",
+  "error": "invalid JSON",
+  "patch": {
+    ".cursor-plugin/plugin.json": "{ \"name\": "
+  }
+}

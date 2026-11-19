@@ -1,0 +1,10 @@
+{
+  "description": "Cursor plugin manifest has an unknown key",
+  "expect": "fail",
+  "error": "additional properties: unknownKey",
+  "patch": {
+    ".cursor-plugin/plugin.json": {
+      "unknownKey": true
+    }
+  }
+}
