@@ -4,7 +4,10 @@
   "title": "Cursor Plugin Marketplace",
   "description": "Schema for .cursor-plugin/marketplace.json — defines a marketplace that indexes one or more Cursor plugins.",
   "type": "object",
-  "required": ["name", "plugins"],
+  "required": [
+    "name",
+    "plugins"
+  ],
   "additionalProperties": false,
   "properties": {
     "name": {
@@ -29,14 +32,18 @@
     },
     "plugins": {
       "type": "array",
-      "items": { "$ref": "#/$defs/pluginEntry" },
+      "items": {
+        "$ref": "#/$defs/pluginEntry"
+      },
       "description": "List of plugins available in the marketplace."
     }
   },
   "$defs": {
     "owner": {
       "type": "object",
-      "required": ["name"],
+      "required": [
+        "name"
+      ],
       "additionalProperties": false,
       "properties": {
         "name": {
@@ -53,7 +60,10 @@
     },
     "pluginEntry": {
       "type": "object",
-      "required": ["name", "source"],
+      "required": [
+        "name",
+        "source"
+      ],
       "additionalProperties": false,
       "properties": {
         "name": {
@@ -74,6 +84,15 @@
         "minClientVersions": {
           "$ref": "#/$defs/minClientVersions",
           "description": "Minimum client versions required to install the plugin, keyed by client identifier."
+        },
+        "version": {
+          "type": "string",
+          "description": "Local addition: Cursor accepts it, the published schema forbids it."
+        },
+        "homepage": {
+          "type": "string",
+          "format": "uri",
+          "description": "Local addition: Cursor accepts it, the published schema forbids it."
         }
       }
     },
@@ -102,8 +121,12 @@
     "clientVersionRequirement": {
       "description": "A minimum semantic version, or the literal \"never\" when that client must not list or install the plugin.",
       "oneOf": [
-        { "$ref": "#/$defs/semver" },
-        { "const": "never" }
+        {
+          "$ref": "#/$defs/semver"
+        },
+        {
+          "const": "never"
+        }
       ]
     },
     "semver": {
