@@ -1,0 +1,44 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.28/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.28",
+  "version": "1.0.1",
+  "id": "78928e57-fa8a-5925-b5c5-d05dad234cdb",
+  "developer": {
+    "name": "ClickUp",
+    "websiteUrl": "https://clickup.com",
+    "privacyUrl": "https://clickup.com/terms/privacy",
+    "termsOfUseUrl": "https://clickup.com/terms"
+  },
+  "name": {
+    "short": "ClickUp",
+    "full": "ClickUp"
+  },
+  "description": {
+    "short": "Manage ClickUp tasks, docs, and chat from Microsoft 365 Copilot.",
+    "full": "Connect Microsoft 365 Copilot to your ClickUp workspace — manage tasks, track time, search documents, and chat without switching context. The plugin connects to ClickUp's hosted MCP server; on first use you authorize with your ClickUp account via OAuth."
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "accentColor": "#6647F0",
+  "agentConnectors": [
+    {
+      "id": "clickup",
+      "displayName": "ClickUp",
+      "description": "ClickUp's hosted MCP server, providing tools for tasks, documents, chat, time tracking, and workspace search.",
+      "toolSource": {
+        "remoteMcpServer": {
+          "mcpServerUrl": "https://mcp.clickup.com/mcp",
+          "mcpToolDescription": {
+            "file": "tools/clickup-tools.json"
+          },
+          "authorization": {
+            "type": "OAuthPluginVault",
+            "referenceId": "ZDhjNDkxYzctNjFmOS00NDQ0LThiMjYtNDE5MDEyYjQwMjE4IyMxNWVhYmNlNC0xNTk5LTQ1ODktYjIyNy04ZWEzZDI0ZGE0YmU="
+          }
+        }
+      }
+    }
+  ]
+}
