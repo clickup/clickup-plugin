@@ -1,0 +1,81 @@
+name: Manifest checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# shell: bash runs with -eo pipefail, so a failure inside a pipe fails the step.
+defaults:
+  run:
+    shell: bash
+
+env:
+  CLAUDE_CODE_VERSION: 2.1.326
+  # No auto-update, telemetry or error reporting from Claude Code during the checks.
+  CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
+
+jobs:
+  manifest-checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.23.4
+
+      # Each manifest against the pinned JSON Schema of the client that reads it.
+      - name: Validate manifests
+        run: |
+          ajv=(npx --yes -p ajv-cli@5.0.0 -p ajv-formats@3.0.1 ajv validate --strict=false -c ajv-formats)
+          "${ajv[@]}" --spec=draft2020 -s ci/schemas/plugin.schema.json -d plugin.json
+          "${ajv[@]}" --spec=draft2020 -s ci/schemas/mcp.schema.json -d mcp.json
+          "${ajv[@]}" -s ci/schemas/cursor-plugin.schema.json -d .cursor-plugin/plugin.json
+          "${ajv[@]}" -s ci/schemas/cursor-marketplace.schema.json -d .cursor-plugin/marketplace.json
+          "${ajv[@]}" -s ci/schemas/quirks.schema.json -d .cursor-plugin/marketplace.json
+
+      # A marketplace's own name is the marketplace, so only its plugin entries count.
+      - name: Same name and version everywhere
+        run: |
+          plugins=(plugin.json .claude-plugin/plugin.json .cursor-plugin/plugin.json .antigravity-plugin/plugin.json)
+          marketplaces=(.claude-plugin/marketplace.json .cursor-plugin/marketplace.json)
+          status=0
+          for field in name version; do
+            # One jq per assignment, so errexit stops the step on a missing or invalid file.
+            from_plugins=$(jq -r --arg f "${field}" '.[$f] // empty' "${plugins[@]}")
+            from_marketplaces=$(jq -r --arg f "${field}" '.plugins[]?[$f] // empty' "${marketplaces[@]}")
+            distinct=$(printf '%s\n%s\n' "${from_plugins}" "${from_marketplaces}" | sort -u)
+            if [ "$(printf '%s\n' "${distinct}" | grep -c .)" -ne 1 ]; then
+              echo "Manifests disagree on ${field}:" >&2
+              printf '%s\n' "${distinct}" >&2
+              status=1
+            fi
+          done
+          exit "${status}"
+
+      # Downloads Claude Code, so it retries.
+      - name: Install Claude Code
+        run: |
+          for attempt in 1 2 3; do
+            if npm install --global "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}"; then
+              exit 0
+            fi
+            echo "Install attempt ${attempt} failed" >&2
+            if [ "${attempt}" -lt 3 ]; then
+              sleep 5
+            fi
+          done
+          exit 1
+
+      - name: Claude plugin validate
+        run: claude plugin validate . --strict
