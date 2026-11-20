@@ -22,6 +22,10 @@ Or from inside Claude Code:
 
 Install from the [Cursor Marketplace](https://cursor.com/marketplace) — search for **ClickUp**.
 
+### Google Antigravity
+
+In Antigravity, open **Customizations → Plugins**, click **+ Install from URL**, and paste `https://github.com/clickup/clickup-plugin`.
+
 ### Microsoft 365 Copilot ([Cowork](https://learn.microsoft.com/en-us/microsoft-365/copilot/cowork/cowork-manage-plugins))
 
 In Cowork, open **Sources & Skills** → **Plugins** and find **ClickUp** under Discover, or ask your admin to deploy it from the Microsoft 365 admin center. The app package source lives in [`m365/`](./m365/).
@@ -69,6 +73,16 @@ Or the stdio fallback:
   }
 }
 ```
+
+### Skills
+
+The plugin includes three skills — workflow playbooks the assistant follows for jobs that take more than one tool call. Each activates on a plain-language request, previews anything it plans to create, and waits for your approval before writing to your workspace.
+
+- **task-decomposition** — "break this down": turns a goal or oversized task into a small set of ordered subtasks with dependencies.
+- **daily-standup** — "run my standup": drafts a standup from your open work, asks what changed, writes your answers back to the tasks, and gives you the summary to share.
+- **repeat-project** — "set this up for the new client": rebuilds a finished project for the next run, swapping in the new details and shifting every date onto the new schedule.
+
+Skills live in `skills/<name>/SKILL.md` and are discovered automatically — no configuration needed.
 
 ## Links
 
