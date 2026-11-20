@@ -51,9 +51,10 @@ jobs:
           marketplaces=(.claude-plugin/marketplace.json .cursor-plugin/marketplace.json)
           status=0
           for field in name version; do
-            values=$(jq -r --arg f "${field}" '.[$f] // empty' "${plugins[@]}"
-                     jq -r --arg f "${field}" '.plugins[]?[$f] // empty' "${marketplaces[@]}")
-            distinct=$(printf '%s\n' "${values}" | sort -u)
+            # One jq per assignment, so errexit stops the step on a missing or invalid file.
+            from_plugins=$(jq -r --arg f "${field}" '.[$f] // empty' "${plugins[@]}")
+            from_marketplaces=$(jq -r --arg f "${field}" '.plugins[]?[$f] // empty' "${marketplaces[@]}")
+            distinct=$(printf '%s\n%s\n' "${from_plugins}" "${from_marketplaces}" | sort -u)
             if [ "$(printf '%s\n' "${distinct}" | grep -c .)" -ne 1 ]; then
               echo "Manifests disagree on ${field}:" >&2
               printf '%s\n' "${distinct}" >&2
